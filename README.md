@@ -11,6 +11,8 @@ Beat is a command line tool to do fare estimation for a big set of rides.
 ```
 $ cd $GOPATH
 $ mkdir -p src/bitbucket.org/clivern
+$ git clone https://Clivern@bitbucket.org/Clivern/beat.git
+$ cd beat
 ```
 
 

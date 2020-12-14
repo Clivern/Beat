@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"os"
 
-	"bitbucket.org/clivern/beat/core/util"
-
 	"github.com/spf13/cobra"
 )
 

@@ -17,6 +17,12 @@ install_revive:
 	$(GO) get github.com/mgechev/revive
 
 
+## install_golint: Install golint for linting.
+install_golint:
+	@echo ">> ============= Install Revive ============= <<"
+	$(GO) get -u golang.org/x/lint/golint
+
+
 ## style: Check code style.
 style:
 	@echo ">> ============= Checking Code Style ============= <<"
@@ -56,6 +62,7 @@ test:
 lint:
 	@echo ">> ============= Lint All Files ============= <<"
 	revive -config config.toml -exclude vendor/... -formatter friendly ./...
+	golint ./...
 
 
 ## verify: Verify dependencies
@@ -89,12 +96,6 @@ coverage:
 ## ci: Run all CI tests.
 ci: style check_license test vet lint
 	@echo "\n==> All quality checks passed"
-
-
-## run: Run the service
-run:
-	-cp -n config.dist.yml config.prod.yml
-	$(GO) run poodle.go
 
 
 .PHONY: help
