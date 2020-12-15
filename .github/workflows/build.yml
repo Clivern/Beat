@@ -20,6 +20,7 @@ jobs:
         run: |
           export PATH=${PATH}:`go env GOPATH`/bin
           make install_revive
+          make install_golint
 
       - name: Run make ci
         run: |

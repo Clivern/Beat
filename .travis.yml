@@ -43,6 +43,7 @@ script:
   - cd clivern/beat
   # Config & execute ci tasks
   - make install_revive
+  - make install_golint
   - make ci
   # Workaround to clear any package used for testing only
   - git status
