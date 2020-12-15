@@ -83,7 +83,7 @@ I use a data pipeline to process the input CSV file, It works like the following
 The command line tool is organized as packages:
 
 - `cmd`: Holding all commands.
-- `core/model`: Holding the entites we have like `Ride`, `Position` ... etc
+- `core/model`: Holding the entites we have like `Ride`, `Coordinate` ... etc
 - `core/modules`: Holding the domain logic.
 - `core/utils`: Small functions to do the data conversion and some for file manipulation.
 - `pkg`: Contains a small reusable functions for unit and functional test cases.
