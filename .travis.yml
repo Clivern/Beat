@@ -33,12 +33,12 @@ env:
 install: true
 
 # Fix this by renaming the directory before testing.
-# https://github.com/travis-ci/travis-ci/issues/4573
+# https://bitbucket.com/travis-ci/travis-ci/issues/4573
 script:
   - export GOBIN="$GOPATH/bin"
   - export PATH="$PATH:$GOBIN"
   # Fix dir names
-  - cd $GOPATH/src/github.com/
+  - cd $GOPATH/src/bitbucket.com/
   - mv Clivern clivern
   - cd clivern/beat
   # Config & execute ci tasks
