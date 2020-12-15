@@ -14,12 +14,9 @@ import (
 // Verbose var
 var Verbose bool
 
-// Config var
-var Config string
-
 var rootCmd = &cobra.Command{
 	Use: "beat",
-	Short: `A Command Line Tool to do Fare Estimation for a big set of rides.
+	Short: `A Command Line Tool to do Fare Estimation for a big set of Rides.
 
 If you have any suggestions, bug reports, or annoyances please report
 them to our issue tracker at <https://bitbucket.org/clivern/beat>`,
@@ -27,13 +24,6 @@ them to our issue tracker at <https://bitbucket.org/clivern/beat>`,
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&Verbose, "verbose", "v", false, "verbose output")
-	rootCmd.PersistentFlags().StringVarP(
-		&Config,
-		"config",
-		"c",
-		"",
-		"config file",
-	)
 }
 
 // Execute runs cmd tool

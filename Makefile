@@ -1,6 +1,9 @@
 GO           ?= go
 GOFMT        ?= $(GO)fmt
 pkgs          = ./...
+BINARY_NAME=beat
+BINARY_LINUX=releases/$(BINARY_NAME)_linux_amd64
+BINARY_MAC=releases/$(BINARY_NAME)_darwin_amd64
 
 
 help: Makefile
@@ -91,6 +94,13 @@ coverage:
 	rm -f coverage.html cover.out
 	$(GO) test -coverprofile=cover.out $(pkgs)
 	go tool cover -html=cover.out -o coverage.html
+
+
+## build: Build go binaries for Linux and Mac
+build:
+	mkdir releases
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -o $(BINARY_LINUX) -v
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GO) build -o $(BINARY_MAC) -v
 
 
 ## ci: Run all CI tests.

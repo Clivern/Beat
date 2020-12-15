@@ -17,3 +17,5 @@ config.prod.yml
 dist
 
 sync
+
+releases
