@@ -2,6 +2,8 @@
 
 Beat is a command line tool built with golang to do a fare estimation for a big dataset of rides.
 
+[![Build Status](https://travis-ci.com/Clivern/Beat.svg?branch=master)](https://travis-ci.com/Clivern/Beat)
+
 ## Documentation
 
 
