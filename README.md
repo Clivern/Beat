@@ -2,7 +2,7 @@
 
 Beat is a command line tool built with golang to do a fare estimation for a big dataset of rides.
 
-[![Build Status](https://travis-ci.com/Clivern/Beat.svg?branch=master)](https://travis-ci.com/Clivern/Beat)
+[![Build Status](https://travis-ci.com/Clivern/Beat.svg?branch=master)](https://travis-ci.com/bitbucket/Clivern/beat)
 
 ## Documentation
 
@@ -55,6 +55,32 @@ $ ./releases/beat_darwin_amd64
 $ go run beat.go
 ```
 
+Anytime you want to show the tool verbose logs, add `-v` to the command as explained in the tool help
+
+```bash
+$ ./releases/beat_darwin_amd64
+
+A Command Line Tool to do Fare Estimation for a big set of Rides.
+
+If you have any suggestions, bug reports, or annoyances please report
+them to our issue tracker at <https://bitbucket.org/clivern/beat>
+
+Usage:
+  beat [command]
+
+Available Commands:
+  calculate   Calculate fare for a big set of rides
+  help        Help about any command
+  license     Print the license
+  version     Print the version number
+
+Flags:
+  -h, --help      help for beat
+  -v, --verbose   verbose output
+
+Use "beat [command] --help" for more information about a command.
+```
+
 In case you did some code changes, it is pretty easy to run the sanity check locally:
 
 ```bash
@@ -88,14 +114,14 @@ The command line tool is organized as packages:
 - `core/model`: Holding the entites we have like `Ride`, `Coordinate` ... etc
 - `core/modules`: Holding the domain logic.
 - `core/utils`: Small functions to do the data conversion and some for file manipulation.
-- `pkg`: Contains a small reusable functions for unit and functional test cases.
+- `pkg`: Contains a small reusable functions for unit and functional test cases purposes.
 
 And Some other folders and files:
 
 - `testdata`: Files uses as test data.
 - `cache`: Used during build since some tests will create a test files.
-- `.github`: Github workflow files. If this solution hosted on github, it will run build on push and create a release once we create a new tag. Bitbucket offer something but it is unfortunately not for free.
-- `config.toml`: Used to configure golang revive linter. It is a nice linter https://github.com/mgechev/revive
+- `.github`: Github workflow files. If this solution hosted on github, it will run build on push and create a release once we create a new tag. Bitbucket offer something but it is unfortunately not for free. Here i am using travis.com.
+- `config.toml`: Used to configure golang revive linter. It is a nice linter https://github.com/mgechev/revive I use together with `golint`.
 
 
 ### Improvements
@@ -103,10 +129,9 @@ And Some other folders and files:
 This tools can be improved by:
 
 - More test cases and debug logs.
-- It can be a REST service that calculate the fare on a real time or at the end of the ride. The calculations should run on Async way (by goroutines or separate processes/workers)
+
+- It can be a REST service that store coordinates, calculate the fare on real time or at the end of the ride. The calculations should run on Async way (by goroutines or separate processes/workers).
+
 - If the tool meant to work with a big dataset of rides that already happened in the past, we can improve the way it works. at least support multiple data sources as input not just CSV.
-- The tool assume that the data are in a good shape, like coordinates are always sorted based on timestamp.
 
-
-
-
+- The tool assume that the data are in a good shape, like coordinates are always sorted based on timestamp as explained on the assignment.

@@ -25,23 +25,28 @@ var (
 var versionCmd = &cobra.Command{
 	Use:   "version",
 	Short: "Print the version number",
-	Run: func(cmd *cobra.Command, args []string) {
-		if Verbose {
-			log.SetLevel(log.DebugLevel)
-		}
+	Run:   VersionHandler,
+}
 
-		log.Debug("Version command got called.")
+// VersionHandler runs the version command handler
+func VersionHandler(_ *cobra.Command, args []string) {
+	fmt.Println(versionHandler(args...))
+}
 
-		fmt.Println(
-			fmt.Sprintf(
-				`Current Beat Version %v Commit %v, Built @%v By %v.`,
-				Version,
-				Commit,
-				Date,
-				BuiltBy,
-			),
-		)
-	},
+func versionHandler(_ ...string) string {
+	if Verbose {
+		log.SetLevel(log.DebugLevel)
+	}
+
+	log.Debug("Version command got called.")
+
+	return fmt.Sprintf(
+		`Current Beat Version %v Commit %v, Built @%v By %v.`,
+		Version,
+		Commit,
+		Date,
+		BuiltBy,
+	)
 }
 
 func init() {

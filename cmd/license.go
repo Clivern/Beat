@@ -14,15 +14,22 @@ import (
 var licenseCmd = &cobra.Command{
 	Use:   "license",
 	Short: "Print the license",
-	Run: func(cmd *cobra.Command, args []string) {
-		if Verbose {
-			log.SetLevel(log.DebugLevel)
-		}
+	Run:   LicenseHandler,
+}
 
-		log.Debug("License command got called.")
+// LicenseHandler runs the license command handler
+func LicenseHandler(_ *cobra.Command, args []string) {
+	fmt.Println(licenseHandler(args...))
+}
 
-		fmt.Println(`MIT License, Copyright (c) 2020 Clivern`)
-	},
+func licenseHandler(_ ...string) string {
+	if Verbose {
+		log.SetLevel(log.DebugLevel)
+	}
+
+	log.Debug("License command got called.")
+
+	return "MIT License, Copyright (c) 2020 Clivern"
 }
 
 func init() {

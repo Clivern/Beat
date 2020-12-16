@@ -33,8 +33,7 @@ func (p *Coordinate) GetDistance(newCoordinate Coordinate) (inMile, inKm float64
 	diffLat := lat2 - lat1
 	diffLon := lng2 - lng1
 
-	a := math.Pow(math.Sin(diffLat/2), 2) + math.Cos(lat1)*math.Cos(lat2)*
-		math.Pow(math.Sin(diffLon/2), 2)
+	a := math.Pow(math.Sin(diffLat/2), 2) + math.Cos(lat1)*math.Cos(lat2)*math.Pow(math.Sin(diffLon/2), 2)
 
 	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 
@@ -44,13 +43,13 @@ func (p *Coordinate) GetDistance(newCoordinate Coordinate) (inMile, inKm float64
 	return inMile, inKm
 }
 
-// GetElapsedTime gets the elapsed time in hours
+// GetElapsedTime gets the elapsed time in hours to move to a new coordinate
 func (p *Coordinate) GetElapsedTime(newCoordinate Coordinate) (float64, error) {
 	diff := newCoordinate.Timestamp.Sub(p.Timestamp)
 	return util.StringToFloat64(fmt.Sprintf("%f", diff.Hours()))
 }
 
-// GetSpeed gets the movement speed in Km/hour
+// GetSpeed gets the movement speed in Km/hour to another coordinate
 func (p *Coordinate) GetSpeed(newCoordinate Coordinate) (float64, error) {
 	var result float64
 

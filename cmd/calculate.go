@@ -31,66 +31,73 @@ var Config string
 var calculateCmd = &cobra.Command{
 	Use:   "calculate",
 	Short: "Calculate fare for a big set of rides",
-	Run: func(cmd *cobra.Command, args []string) {
-		if Verbose {
-			log.SetLevel(log.DebugLevel)
-		}
+	Run:   CalculateHandler,
+}
 
-		log.Debug("calculate command got called.")
+// CalculateHandler runs the calculate command handler
+func CalculateHandler(_ *cobra.Command, args []string) {
+	calculateHandler(args...)
+}
 
-		spin := spinner.New(spinner.CharSets[27], 100*time.Millisecond)
-		spin.Color("green")
-		spin.Start()
+func calculateHandler(_ ...string) {
+	if Verbose {
+		log.SetLevel(log.DebugLevel)
+	}
 
-		content, err := util.ReadFile(Config)
+	log.Debug("calculate command got called.")
 
-		if err != nil {
-			panic(fmt.Sprintf(
-				"Error while loading config file %s: %s",
-				Config,
-				err.Error(),
-			))
-		}
+	spin := spinner.New(spinner.CharSets[27], 100*time.Millisecond)
+	spin.Color("green")
+	spin.Start()
 
-		viper.SetConfigType("yaml")
-		err = viper.ReadConfig(bytes.NewBuffer([]byte(content)))
+	content, err := util.ReadFile(Config)
 
-		if err != nil {
-			panic(fmt.Sprintf(
-				"Error while loading config file content %s: %s",
-				Config,
-				err.Error(),
-			))
-		}
+	if err != nil {
+		panic(fmt.Sprintf(
+			"Error while loading config file %s: %s",
+			Config,
+			err.Error(),
+		))
+	}
 
-		log.Debug(fmt.Sprintf("Config file %s loaded successfully", Config))
+	viper.SetConfigType("yaml")
+	err = viper.ReadConfig(bytes.NewBuffer([]byte(content)))
 
-		channel, err := module.GenerateData(DatasetFile)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"Error while loading config file content %s: %s",
+			Config,
+			err.Error(),
+		))
+	}
 
-		if err != nil {
-			panic(fmt.Sprintf(
-				"Error while reading dataset file %s: %s",
-				DatasetFile,
-				err.Error(),
-			))
-		}
+	log.Debug(fmt.Sprintf("Config file %s loaded successfully", Config))
 
-		outChannel := module.ProcessData(channel)
+	channel, err := module.GenerateData(DatasetFile)
 
-		err = module.StoreData(OutputFile, outChannel)
+	if err != nil {
+		panic(fmt.Sprintf(
+			"Error while reading dataset file %s: %s",
+			DatasetFile,
+			err.Error(),
+		))
+	}
 
-		if err != nil {
-			panic(fmt.Sprintf(
-				"Error while storing date to file %s: %s",
-				OutputFile,
-				err.Error(),
-			))
-		}
+	outChannel := module.ProcessData(channel)
 
-		spin.Stop()
+	err = module.StoreData(OutputFile, outChannel)
 
-		fmt.Println(aurora.Green("Ride data processed successfully!"))
-	},
+	if err != nil {
+		panic(fmt.Sprintf(
+			"Error while storing date to file %s: %s",
+			OutputFile,
+			err.Error(),
+		))
+	}
+
+	spin.Stop()
+
+	fmt.Println(aurora.Green("Ride data processed successfully!"))
 }
 
 func init() {

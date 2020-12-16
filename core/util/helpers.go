@@ -78,25 +78,6 @@ func FileExists(path string) bool {
 	return false
 }
 
-// PathExists reports whether the path exists
-func PathExists(path string) bool {
-	if _, err := os.Stat(path); os.IsNotExist(err) {
-		return false
-	}
-
-	return true
-}
-
-// DirExists reports whether the dir exists
-func DirExists(path string) bool {
-	if fi, err := os.Stat(path); err == nil {
-		if fi.Mode().IsDir() {
-			return true
-		}
-	}
-	return false
-}
-
 // DeleteFile deletes a file
 func DeleteFile(path string) error {
 	return os.Remove(path)

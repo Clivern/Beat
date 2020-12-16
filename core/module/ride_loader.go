@@ -42,25 +42,25 @@ func (c CSVLoader) Load(ride *model.Ride, csv string) (*model.Ride, error) {
 
 		itemsPerLine = strings.Split(lines[i], ",")
 
-		id, err = util.StringToInt(itemsPerLine[0])
+		id, err = util.StringToInt(strings.TrimSpace(itemsPerLine[0]))
 
 		if err != nil {
 			return ride, err
 		}
 
-		lat, err = util.StringToFloat64(itemsPerLine[1])
+		lat, err = util.StringToFloat64(strings.TrimSpace(itemsPerLine[1]))
 
 		if err != nil {
 			return ride, err
 		}
 
-		lng, err = util.StringToFloat64(itemsPerLine[2])
+		lng, err = util.StringToFloat64(strings.TrimSpace(itemsPerLine[2]))
 
 		if err != nil {
 			return ride, err
 		}
 
-		timestamp, err = util.StringToTimestamp(itemsPerLine[3])
+		timestamp, err = util.StringToTimestamp(strings.TrimSpace(itemsPerLine[3]))
 
 		if err != nil {
 			return ride, err

@@ -7,87 +7,97 @@ package util
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
 	"testing"
 	"time"
 
 	"bitbucket.org/clivern/beat/pkg"
 )
 
-// TestHelpers test cases
-func TestHelpers(t *testing.T) {
-	// Get Base DIR and Cache DIR
-	baseDir, _ := os.Getwd()
-	cacheDir := fmt.Sprintf("%s/%s", baseDir, "cache")
-
-	for {
-		if DirExists(cacheDir) {
-			break
-		}
-		baseDir = filepath.Dir(baseDir)
-		cacheDir = fmt.Sprintf("%s/%s", baseDir, "cache")
+// TestStringToIntFunc test cases
+func TestStringToIntFunc(t *testing.T) {
+	var tests = []struct {
+		value     string
+		wantValue int
+		wantError bool
+	}{
+		{"23", 23, false},
+		{"237888", 237888, false},
+		{"f456666", 0, true},
+		{"456666hyy", 0, true},
+		{"df", 0, true},
+		{"344552", 344552, false},
 	}
 
-	// TestStringToIntFunc
-	t.Run("TestStringToIntFunc", func(t *testing.T) {
-		value, err := StringToInt("23")
+	for _, tt := range tests {
+		t.Run("TestStringToIntFunc", func(t *testing.T) {
+			value, err := StringToInt(tt.value)
+			pkg.Expect(t, value, tt.wantValue)
+			pkg.Expect(t, err != nil, tt.wantError)
+		})
+	}
+}
 
-		pkg.Expect(t, value, 23)
-		pkg.Expect(t, err, nil)
+// TestStringToFloat64Func test cases
+func TestStringToFloat64Func(t *testing.T) {
+	var tests = []struct {
+		value     string
+		wantValue float64
+		wantError bool
+	}{
+		{"23.728613", 23.728613, false},
+		{"fr", 0, true},
+		{"f456666", 0, true},
+		{"456666hyy", 0, true},
+		{"45666.6hyy", 0, true},
+		{"344552", 344552, false},
+	}
 
-		value, err = StringToInt("inv")
+	for _, tt := range tests {
+		t.Run("TestStringToFloat64Func", func(t *testing.T) {
+			value, err := StringToFloat64(tt.value)
+			pkg.Expect(t, value, tt.wantValue)
+			pkg.Expect(t, err != nil, tt.wantError)
+		})
+	}
+}
 
-		pkg.Expect(t, value, 0)
-		pkg.Expect(t, strings.Contains(err.Error(), `Unable to convert string value inv to int`), true)
-	})
+// TestStringToTimestampFunc test cases
+func TestStringToTimestampFunc(t *testing.T) {
+	var tests = []struct {
+		value     string
+		wantValue time.Time
+		wantError bool
+	}{
+		{"1405594992", time.Unix(1405594992, 0), false},
+		{value: "fr", wantError: true},
+		{value: "g6738183", wantError: true},
+		{value: "1405594992hy", wantError: true},
+		{value: "14055.94992hy", wantError: true},
+		{"344552", time.Unix(344552, 0), false},
+	}
 
-	// TestStringToFloat64Func
-	t.Run("TestStringToFloat64Func", func(t *testing.T) {
-		value, err := StringToFloat64("23.728613")
-		testFloat := 23.728613
+	for _, tt := range tests {
+		t.Run("TestStringToTimestampFunc", func(t *testing.T) {
+			value, err := StringToTimestamp(tt.value)
+			pkg.Expect(t, value, tt.wantValue)
+			pkg.Expect(t, err != nil, tt.wantError)
+		})
+	}
+}
 
-		pkg.Expect(t, value, testFloat)
-		pkg.Expect(t, err, nil)
-
-		value, err = StringToFloat64("inv")
-		var emptyFloat float64
-
-		pkg.Expect(t, value, emptyFloat)
-		pkg.Expect(t, strings.Contains(err.Error(), `Unable to convert string value inv to float64`), true)
-	})
-
-	// TestStringToTimestampFunc
-	t.Run("TestStringToTimestampFunc", func(t *testing.T) {
-		value, err := StringToTimestamp("1405594992")
-
-		pkg.Expect(t, value, time.Unix(1405594992, 0))
-		pkg.Expect(t, err, nil)
-
-		value, err = StringToTimestamp("inv")
-		var emptyTimestamp time.Time
-
-		pkg.Expect(t, value, emptyTimestamp)
-		pkg.Expect(t, strings.Contains(err.Error(), `Unable to convert string value inv to timestamp`), true)
-	})
-
+// TestFileExistsFunc test cases
+func TestFileExistsFunc(t *testing.T) {
 	// TestFileExistsFunc
 	t.Run("TestFileExistsFunc", func(t *testing.T) {
 		pkg.Expect(t, FileExists("helpers.go"), true)
 		pkg.Expect(t, FileExists("not_found.go"), false)
 	})
+}
 
-	// TestPathExistsFunc
-	t.Run("TestPathExistsFunc", func(t *testing.T) {
-		pkg.Expect(t, PathExists("helpers.go"), true)
-		pkg.Expect(t, PathExists("not_found.go"), false)
-	})
-
-	// TestDirExistsFunc
-	t.Run("TestDirExistsFunc", func(t *testing.T) {
-		pkg.Expect(t, DirExists(cacheDir), true)
-		pkg.Expect(t, DirExists(fmt.Sprintf("%s/notFound", cacheDir)), false)
-	})
+// TestDeleteFileFunc test cases
+func TestDeleteFileFunc(t *testing.T) {
+	baseDir := pkg.GetBaseDir("cache")
+	cacheDir := fmt.Sprintf("%s/%s", baseDir, "cache")
 
 	t.Run("TestDeleteFileFunc", func(t *testing.T) {
 		// Create test file
@@ -96,6 +106,12 @@ func TestHelpers(t *testing.T) {
 		pkg.Expect(t, DeleteFile(tmpFilePath), nil)
 		pkg.Expect(t, DeleteFile(tmpFilePath) != nil, true)
 	})
+}
+
+// TestReadFileFunc test cases
+func TestReadFileFunc(t *testing.T) {
+	baseDir := pkg.GetBaseDir("cache")
+	cacheDir := fmt.Sprintf("%s/%s", baseDir, "cache")
 
 	t.Run("TestReadFileFunc", func(t *testing.T) {
 		tmpFilePath := fmt.Sprintf("%s/helpers_test_file_02.txt", cacheDir)

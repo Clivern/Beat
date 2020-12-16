@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// CalculateRideFare calculates the whole ride fare
+// CalculateRideFare calculates the whole ride fare. for a plenty of segments
 func CalculateRideFare(ride *model.Ride) (float64, error) {
 	// Init total from the standard fee
 	total := viper.GetFloat64("fare.standard_fee")
@@ -83,8 +83,10 @@ func calculateSegmentFare(oldCoordinate model.Coordinate, newCoordinate model.Co
 
 		// If hour is more or equal 05:00 and less than or equal 23:00
 		if hour >= 5 && hour <= 23 {
+			// Use the 05:00 - 00:00 price
 			total += distance * viper.GetFloat64("segment.pricing.moving.from_05_00_per_km")
 		} else {
+			// Use the 00:00 - 05:00 price
 			total += distance * viper.GetFloat64("segment.pricing.moving.from_00_05_per_km")
 		}
 	} else {
