@@ -34,7 +34,8 @@ func CalculateRideFare(ride *model.Ride) (float64, error) {
 		}
 
 		log.Debug(fmt.Sprintf(
-			"Segment fare for coodinate (%f, %f, %s) and coodinate (%f, %f, %s) is %f",
+			"Ride %d, Segment fare for coodinate (%f, %f, %s) and coodinate (%f, %f, %s) is %f",
+			ride.GetID(),
 			coordinate.Latitude,
 			coordinate.Longitude,
 			coordinate.Timestamp,

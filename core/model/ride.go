@@ -81,7 +81,7 @@ func (r *Ride) NormalizeCoordinates() int {
 		speed, err := normalizedCoordinates[len(normalizedCoordinates)-1].GetSpeed(r.Coordinates[index+1])
 
 		log.Debug(fmt.Sprintf(
-			"Speed for coodinate (%f, %f, %s) and coodinate (%f, %f, %s) is %f Km/hour",
+			"Speed for coodinate (%f, %f, %s) and coodinate (%f, %f, %s) is %f km/hour",
 			normalizedCoordinates[len(normalizedCoordinates)-1].Latitude,
 			normalizedCoordinates[len(normalizedCoordinates)-1].Longitude,
 			normalizedCoordinates[len(normalizedCoordinates)-1].Timestamp,
@@ -95,7 +95,7 @@ func (r *Ride) NormalizeCoordinates() int {
 			normalizedCoordinates = append(normalizedCoordinates, r.Coordinates[index+1])
 		} else {
 			log.Debug(fmt.Sprintf(
-				"Remove invalid coodinate (%f, %f, %s) because speed is %f Km/hour more than %f km/hour",
+				"Remove invalid coodinate (%f, %f, %s) because speed is %f km/hour more than %f km/hour",
 				r.Coordinates[index+1].Latitude,
 				r.Coordinates[index+1].Longitude,
 				r.Coordinates[index+1].Timestamp,
