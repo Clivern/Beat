@@ -26,7 +26,7 @@ type Coordinate struct {
 
 // GetDistance gets a distance from another new coordinate
 // Calculations based on Haversine Formula https://en.wikipedia.org/wiki/Haversine_formula
-func (p *Coordinate) GetDistance(newCoordinate Coordinate) (inMile, inKm float64) {
+func (p *Coordinate) GetDistance(newCoordinate Coordinate) (float64, float64) {
 	lat1, lng1 := p.toRadians()
 	lat2, lng2 := newCoordinate.toRadians()
 
@@ -37,8 +37,8 @@ func (p *Coordinate) GetDistance(newCoordinate Coordinate) (inMile, inKm float64
 
 	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 
-	inMile = c * earthRadiusMi
-	inKm = c * earthRaidusKm
+	inMile := c * earthRadiusMi
+	inKm := c * earthRaidusKm
 
 	return inMile, inKm
 }
@@ -46,6 +46,7 @@ func (p *Coordinate) GetDistance(newCoordinate Coordinate) (inMile, inKm float64
 // GetElapsedTime gets the elapsed time in hours to move to a new coordinate
 func (p *Coordinate) GetElapsedTime(newCoordinate Coordinate) (float64, error) {
 	diff := newCoordinate.Timestamp.Sub(p.Timestamp)
+
 	return util.StringToFloat64(fmt.Sprintf("%f", diff.Hours()))
 }
 
