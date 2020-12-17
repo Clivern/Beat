@@ -41,8 +41,9 @@ $ cd beat
 Here is the steps to build new binaries or run interactively
 
 ```
-# Install & build with goreleaser
+# Install goreleaser on Mac. Or download a binary from here https://github.com/goreleaser/goreleaser/releases
 $ brew install goreleaser
+
 $ goreleaser --snapshot --skip-publish --rm-dist --parallelism 1
 
 
