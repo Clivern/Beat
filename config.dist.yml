@@ -1,5 +1,5 @@
 app:
-    # The max number of goroutines that run on paraller to process
+    # The max number of goroutines that run on parallel to process
     # the rides dataset. Increasing this value will process a dataset fast
     # but a very big value will cause error due to maximum number of concurrent operations has reached
     max_goroutines: 100
