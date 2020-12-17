@@ -16,10 +16,11 @@ import (
 	"bitbucket.org/clivern/beat/core/util"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
 )
 
 // GenerateData sends a ride data as string to a channel
-// The ride data is a certain number of lines containing coordinates
+// The ride data is a certain number of lines containing coordinates (segments)
 func GenerateData(filePath string) (<-chan string, error) {
 
 	channel := make(chan string)
@@ -91,9 +92,10 @@ func ProcessData(inputChannel <-chan string) <-chan string {
 	go func() {
 		wg := &sync.WaitGroup{}
 
-		for lines := range inputChannel {
+		// Limit the number of goroutines
+		for t := 0; t < viper.GetInt("app.max_goroutines"); t++ {
 			wg.Add(1)
-			go ProcessRide(lines, outChannel, wg)
+			go ProcessRide(inputChannel, outChannel, wg)
 		}
 
 		wg.Wait()
@@ -104,36 +106,38 @@ func ProcessData(inputChannel <-chan string) <-chan string {
 	return outChannel
 }
 
-// ProcessRide calculates the ride estimate fare
-func ProcessRide(lines string, outChannel chan<- string, wg *sync.WaitGroup) {
-	ride := model.NewRide()
-	loader := CSVLoader{}
+// ProcessRide calculates the ride fare
+func ProcessRide(inputChannel <-chan string, outChannel chan<- string, wg *sync.WaitGroup) {
+	for lines := range inputChannel {
+		ride := model.NewRide()
+		loader := CSVLoader{}
 
-	// Load CSV data into the ride object
-	loader.Load(ride, lines)
+		// Load CSV data into the ride object
+		loader.Load(ride, lines)
 
-	// Remove invalid coordinates
-	ride.NormalizeCoordinates()
+		// Remove invalid coordinates
+		ride.NormalizeCoordinates()
 
-	// Calculate The fare
-	fare, err := CalculateRideFare(ride)
+		// Calculate The fare
+		fare, err := CalculateRideFare(ride)
 
-	if err != nil {
-		log.Debug(fmt.Sprintf(
-			"Error while calculating ride %d fare: %s",
-			ride.GetID(),
-			err.Error(),
-		))
+		if err != nil {
+			log.Debug(fmt.Sprintf(
+				"Error while calculating ride %d fare: %s",
+				ride.GetID(),
+				err.Error(),
+			))
+		}
+
+		ride.SetFare(fare)
+
+		outChannel <- fmt.Sprintf("%d,%.2f", ride.ID, fare)
 	}
 
-	ride.SetFare(fare)
-
-	outChannel <- fmt.Sprintf("%d,%.2f", ride.ID, fare)
 	wg.Done()
 }
 
-// StoreData store ride id and estimate fare into a file
-// it gets the values from input channel
+// StoreData store ride id and fare into a file. it gets the values from input channel
 func StoreData(filePath string, channel <-chan string) error {
 	if util.FileExists(filePath) {
 		if err := util.DeleteFile(filePath); err != nil {

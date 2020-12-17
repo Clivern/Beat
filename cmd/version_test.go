@@ -7,13 +7,23 @@ package cmd
 import (
 	"testing"
 
-	"bitbucket.org/clivern/beat/pkg"
+	"github.com/franela/goblin"
 )
 
 // TestVersionCommand test cases
 func TestVersionCommand(t *testing.T) {
-	// TestVersionCommand
-	t.Run("TestVersionCommand", func(t *testing.T) {
-		pkg.Expect(t, versionHandler(), "Current Beat Version dev Commit none, Built @unknown By unknown.")
+	g := goblin.Goblin(t)
+
+	g.Describe("VersionCommand", func() {
+		g.It("It should run and return the expected string", func() {
+			g.Assert(versionHandler()).Equal("Current Beat Version dev Commit none, Built @unknown By unknown.")
+		})
 	})
+}
+
+// BenchmarkVersionCommand benchmark
+func BenchmarkVersionCommand(b *testing.B) {
+	for n := 0; n < b.N; n++ {
+		versionHandler()
+	}
 }

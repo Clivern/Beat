@@ -10,20 +10,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"reflect"
-	"testing"
 
 	"github.com/spf13/viper"
 )
-
-// Expect compare two values for testing
-func Expect(t *testing.T, got, want interface{}) {
-	t.Logf(`Comparing values %v, %v`, got, want)
-
-	if !reflect.DeepEqual(got, want) {
-		t.Errorf(`ERROR! got %v, want %v`, got, want)
-	}
-}
 
 // GetBaseDir returns the command line tool base dir
 // Base dir idenfied if dirName found

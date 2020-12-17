@@ -36,39 +36,49 @@ var calculateCmd = &cobra.Command{
 
 // CalculateHandler runs the calculate command handler
 func CalculateHandler(_ *cobra.Command, args []string) {
-	calculateHandler(args...)
+	spin := spinner.New(spinner.CharSets[27], 100*time.Millisecond)
+	spin.Color("green")
+	spin.Start()
+
+	result, err := calculateHandler(args...)
+
+	spin.Stop()
+
+	// If command failed due to wrong command flags or non existent files,
+	// stop execution
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println(aurora.Green(result))
 }
 
-func calculateHandler(_ ...string) {
+func calculateHandler(_ ...string) (string, error) {
 	if Verbose {
 		log.SetLevel(log.DebugLevel)
 	}
 
 	log.Debug("calculate command got called.")
 
-	spin := spinner.New(spinner.CharSets[27], 100*time.Millisecond)
-	spin.Color("green")
-	spin.Start()
-
 	content, err := util.ReadFile(Config)
 
 	if err != nil {
-		panic(fmt.Sprintf(
+		return "", fmt.Errorf(
 			"Error while loading config file %s: %s",
 			Config,
 			err.Error(),
-		))
+		)
 	}
 
 	viper.SetConfigType("yaml")
 	err = viper.ReadConfig(bytes.NewBuffer([]byte(content)))
 
 	if err != nil {
-		panic(fmt.Sprintf(
+		return "", fmt.Errorf(
 			"Error while loading config file content %s: %s",
 			Config,
 			err.Error(),
-		))
+		)
 	}
 
 	log.Debug(fmt.Sprintf("Config file %s loaded successfully", Config))
@@ -76,11 +86,11 @@ func calculateHandler(_ ...string) {
 	channel, err := module.GenerateData(DatasetFile)
 
 	if err != nil {
-		panic(fmt.Sprintf(
+		return "", fmt.Errorf(
 			"Error while reading dataset file %s: %s",
 			DatasetFile,
 			err.Error(),
-		))
+		)
 	}
 
 	outChannel := module.ProcessData(channel)
@@ -88,16 +98,14 @@ func calculateHandler(_ ...string) {
 	err = module.StoreData(OutputFile, outChannel)
 
 	if err != nil {
-		panic(fmt.Sprintf(
+		return "", fmt.Errorf(
 			"Error while storing date to file %s: %s",
 			OutputFile,
 			err.Error(),
-		))
+		)
 	}
 
-	spin.Stop()
-
-	fmt.Println(aurora.Green("Ride data processed successfully!"))
+	return "Ride data processed successfully!", nil
 }
 
 func init() {

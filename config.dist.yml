@@ -1,3 +1,9 @@
+app:
+    # The max number of goroutines that run on paraller to process
+    # the rides dataset. Increasing this value will process a dataset fast
+    # but a very big value will cause error due to maximum number of concurrent operations has reached
+    max_goroutines: 100
+
 segment:
     # Segment considered invalid if the speed is more than this value
     # the value is in km/h

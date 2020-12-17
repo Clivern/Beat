@@ -9,6 +9,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -17,7 +18,7 @@ func StringToInt(value string) (int, error) {
 	var result int
 	var err error
 
-	result, err = strconv.Atoi(value)
+	result, err = strconv.Atoi(strings.TrimSpace(value))
 
 	if err != nil {
 		return result, fmt.Errorf(
@@ -35,7 +36,7 @@ func StringToFloat64(value string) (float64, error) {
 	var result float64
 	var err error
 
-	result, err = strconv.ParseFloat(value, 64)
+	result, err = strconv.ParseFloat(strings.TrimSpace(value), 64)
 
 	if err != nil {
 		return result, fmt.Errorf(
@@ -52,7 +53,7 @@ func StringToFloat64(value string) (float64, error) {
 func StringToTimestamp(value string) (time.Time, error) {
 	var result time.Time
 
-	intValue, err := strconv.ParseInt(value, 10, 64)
+	intValue, err := strconv.ParseInt(strings.TrimSpace(value), 10, 64)
 
 	if err != nil {
 		return result, fmt.Errorf(

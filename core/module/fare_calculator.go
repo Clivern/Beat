@@ -13,7 +13,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-// CalculateRideFare calculates the whole ride fare. for a plenty of segments
+// CalculateRideFare calculates the whole ride fare (for a plenty of segments)
 func CalculateRideFare(ride *model.Ride) (float64, error) {
 	// Init total from the standard fee
 	total := viper.GetFloat64("fare.standard_fee")
@@ -63,8 +63,7 @@ func CalculateRideFare(ride *model.Ride) (float64, error) {
 	return total, nil
 }
 
-// calculateSegmentFare calculates the fare for a segment,
-// segment is just a two coordinates
+// calculateSegmentFare calculates the fare for a segment. A segment is just two coordinates
 func calculateSegmentFare(oldCoordinate model.Coordinate, newCoordinate model.Coordinate) (float64, error) {
 	var total float64
 
