@@ -121,13 +121,18 @@ The command line tool is organized as packages:
 - `core/utils`: Small functions to do the data conversion and some for file manipulation.
 - `pkg`: Contains a small reusable functions for unit and functional test cases purposes.
 
-And Some other folders and files:
+And some other folders and files:
 
 - `testdata`: Files uses as test data.
 - `cache`: Used during build since some tests will create a test files.
 - `.github`: Github workflow files. If this solution hosted on github, it will run build on push and create a release once we create a new tag. Bitbucket offer something but it is unfortunately not for free. Here i am using travis.com.
 - `config.toml`: Used to configure golang revive linter. It is a nice linter https://github.com/mgechev/revive I use together with `golint`.
 
+
+Almost the whole command line functionality is covered by both unit and functional test cases with benchmarks. 
+You can see the build result and coverage here https://travis-ci.com/bitbucket/Clivern/beat. 
+The tool works with go 1.13.x, go 1.14.x and go 1.15.x. The document mentioned version go 1.8 but i assumed it is just not updated to the latest go versions.
+anyways the tool could work with go 1.11 & go 1.12 if I downgrade some dependencies. Going less than go 1.11 is quite hard since i will lose go modules support https://blog.golang.org/using-go-modules
 
 
 ### Improvements
