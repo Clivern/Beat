@@ -33,6 +33,7 @@ After installing golang, You need to fork the repository like the following:
 ```bash
 $ cd $GOPATH
 $ mkdir -p src/bitbucket.org/clivern
+$ cd src/bitbucket.org/clivern
 $ git clone https://Clivern@bitbucket.org/Clivern/beat.git
 $ cd beat
 ```
