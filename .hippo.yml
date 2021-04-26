@@ -1,0 +1,22 @@
+github:
+  contribution_greeter_flow:
+    first_contribution:
+      active_for:
+        - prs
+        - issues
+      enabled: true
+      message: 'Hey {author.name}! Thanks for your first contribution'
+    help_message:
+      active_for:
+        - prs
+        - issues
+      when:
+        - first_contribution
+        - repeated_contribution
+      enabled: true
+    repeated_contribution:
+      active_for:
+        - prs
+        - issues
+      enabled: true
+      message: 'Hey {author.name}! Thanks for your contribution'
